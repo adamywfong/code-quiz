@@ -1,0 +1,21 @@
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+li {
+    list-style: none;
+}
+
+#score-screen > * {
+    display: none;
+}
+
+#question-screen > *{
+    display: none;
+}
+
+#results-screen > * {
+    display: none;
+}

@@ -8,8 +8,44 @@
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
-    <h1 id="timer"></h1>
-    <button id="trigger">Start</button>
+    <header>
+      <p id="highscores">View Highscores</p>
+      <p id="timer"></p>
+    </header>
+    <main>
+      <section id="score-screen">
+        <p id="score-list"></p>
+        <button id="back-highscores">Go Back</button>
+        <button id="clear-highscores">Clear Highscores</button>
+      </section>
+      <section id="start-screen">
+        <h1> Start Quiz</h1>
+        <button id="trigger">Start</button>
+      </section>
+      <section id="question-screen">
+        <h2 id="question"></h2>
+        <ul id="answers">
+          <li>
+            <button id="answer1">1</button>
+          </li>
+          <li>
+            <button id="answer2">2</button>
+          </li>
+          <li>
+            <button id="answer3">3</button>
+          </li>
+          <li>
+            <button id="answer4">4</button>
+          </li>
+        </ul>
+        <p id="question-result"></p>
+      </section>
+      <section id="results-screen">
+        <h1>All Done</h1>
+        <p id="final-score"></p>
+        <input placeholder="Enter your initials" id="name" /><button id="submit">Submit</button>
+      </section>
     <script src="assets/js/script.js"></script>
+    </main>
   </body>
 </html>
