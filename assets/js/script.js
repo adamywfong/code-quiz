@@ -91,14 +91,13 @@ function startQuiz(){
 //Opens score-screen when view high scores is clicked (top left of page)
 highscoresEl.addEventListener("click", showHighscore)
 function showHighscore(){
-    recallId = activeId
-    displayById("#score-screen");
+    if (activeId !== "#score-screen") {
+        recallId = activeId;
+        displayById("#score-screen");
+    }
 }
 
-goBackHS.addEventListener("click", hideHighscores)
-function hideHighscores(){
-    displayById(recallId); //return to screen before high scores
-}
+goBackHS.addEventListener("click", function() {displayById(recallId);}) //return to screen before high scores
 
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
