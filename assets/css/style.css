@@ -1,11 +1,40 @@
-/* TODO: all formatting */
+:root {
+    --button: #a96cc7;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 2%;
+    padding: 5px;
+    text-align: center;
+}
+
 header {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
-li {
-    list-style:decimal;
+main {
+    margin: 2%
+}
+
+button {
+    background-color: var(--button);
+    color: beige;
+    padding: 3px 5px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#view-highscores {
+    color:var(--button);
+}
+
+#view-highscores:hover {
+    cursor: pointer;
 }
 
 #score-screen {
@@ -14,6 +43,11 @@ li {
 
 #question-screen {
     display: none;
+}
+
+#question-screen li {
+    list-style:lower-alpha;
+    text-align: left;
 }
 
 #results-screen {

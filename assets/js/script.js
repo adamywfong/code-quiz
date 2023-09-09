@@ -1,16 +1,42 @@
 //TODO: add highscore sorting
 var timeLimit = 40; //timer starting time
 var count = timeLimit;
-var questions = ["The answer is #4",
-     "The answer is #2",
-     "The answer is #4", 
-     "The answer is #3", 
-     "The answer is #1"];
-var answers1 = ["no", "no", "no", "no", "yesssss"];
-var answers2 = ["no", "yess", "no", "no", "no"];
-var answers3 = ["no", "no", "no", "yessss", "no"];
-var answers4 = ["yes", "no", "yesss", "no", "no"];
-var correctAnswers = ["answer4", "answer2", "answer4", "answer3", "answer1"];
+var questions = [
+    "Which of the following keywords is used to define a variable in Javascript?",
+    "How do you stop an interval timer in Javascript?",
+    "How do you write a comment in css?",
+    "What is 3+5?",
+    "Is the answer to this question #1?"];
+var answers1 = [
+    "var",
+    "clearInterval",
+    "//",
+    "7",
+    "yes"];
+var answers2 = [
+    "let",
+    "clearTimer",
+    "```",
+    "8",
+    "no"];
+var answers3 = [
+    "both a and b",
+    "intervalOver",
+    "#",
+    "9",
+    "no"];
+var answers4 = [
+    "None of the above",
+    "None of the above",
+    "/* */",
+    "35",
+    "no"];
+var correctAnswers = [
+    "answer3",
+    "answer1", 
+    "answer4",
+    "answer2",
+    "answer1"];
 var highscoreList = [];
 var questionIndex = 0;
 var score = 0;
@@ -55,9 +81,6 @@ function askQuestion(number) {
 function hideById(idTag) {
     var section = document.querySelector(idTag);
     section.setAttribute("style", "display: none;");
-    // for (var i=0;i<section.children.length;i++) {
-    //     section.children[i].setAttribute("style", "display: none;");
-    // }
 }
 
 //show all children within section with given id
@@ -66,9 +89,6 @@ function displayById(idTag) {
     activeId=idTag;
     var section = document.querySelector(idTag);
     section.setAttribute("style", "display: block;");
-    // for (var i=0;i<section.children.length;i++) {
-    //     section.children[i].setAttribute("style", "display: block;");
-    // }
 }
 
 //starts timer and goes to first question in quiz
@@ -95,15 +115,17 @@ function startQuiz(){
 }
 
 //Opens score-screen when view high scores is clicked (top left of page)
-highscoresEl.addEventListener("click", showHighscore)
+highscoresEl.addEventListener("click", function() {showHighscore();})
 function showHighscore(){
-    if (activeId !== "#score-screen") {
-        recallId = activeId;
-        displayById("#score-screen");
-    }
+    highscoresEl.setAttribute("style", "display: none;");
+    recallId = activeId;
+    displayById("#score-screen");
 }
 
-goBackHS.addEventListener("click", function() {displayById(recallId);}) //return to screen before high scores
+goBackHS.addEventListener("click", function() {
+    displayById(recallId);
+    highscoresEl.setAttribute("style", "display: default;");
+}) //return to screen before high scores
 
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
@@ -156,6 +178,6 @@ function addScore() {
         hsListEntry.textContent = highscoreList[i].name + ": " + highscoreList[i].userScore;
         scoreListEl.appendChild(hsListEntry);
     }
-    displayById("#score-screen");
+    showHighscore();
     recallId="#start-screen"; //pressing 'go back' in high-scores will take you to start-screen
 }
