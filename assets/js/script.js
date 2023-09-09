@@ -1,17 +1,22 @@
+//TODO: add highscore sorting
 var timeLimit = 40; //timer starting time
 var count = timeLimit;
 var highscoreList = [];
 var questionIndex = 0;
 var score = 0;
+var questionWeight = 10; //amount of points awarded on correct answer
+var incorrectPenalty = 10; //time deducted on incorrect answer
 var questions = ["The answer is #4", "The answer is #2","The answer is #4", "The answer is #3", "The answer is #1"];
 var answers1 = ["no", "no", "no", "no", "yesssss"];
 var answers2 = ["no", "yess", "no", "no", "no"];
 var answers3 = ["no", "no", "no", "yessss", "no"];
 var answers4 = ["yes", "no", "yesss", "no", "no"];
 var correctAnswers = ["answer4", "answer2", "answer4", "answer3", "answer1"];
+var activeId = "#start-screen";
+var recallId; 
 
 //elements in header
-var highscoresEl = document.querySelector("#highscores"); //view high scores (top right of screen)
+var highscoresEl = document.querySelector("#view-highscores"); //view highscores (top left of screen)
 var timerEl = document.querySelector("#timer");  //quiz timer(top right of screen)
 
 //elements in start screen
@@ -33,33 +38,7 @@ var scoreEl = document.querySelector("#final-score");
 var nameInput = document.querySelector("#name");
 var submitEl = document.querySelector("#submit");
 
-
-
-
-buttonEl.addEventListener("click", startQuiz);
-function startQuiz(){
-    hideById("#start-screen");
-    displayById("#question-screen");
-    count = timeLimit;
-    score = 0;
-    questionIndex=0;
-    timerEl.textContent = "Time: " + timeLimit;
-    askQuestion(questionIndex);
-    var timerInterval = setInterval(function() {
-        if (count <= 0) { //Stops when time is up
-            clearInterval(timerInterval);
-            timerEl.textContent = "";
-            resultEl.textContent = "";
-            scoreEl.textContent = "Your final score is "+ score;
-            displayById("#results-screen");
-            hideById("#question-screen");
-        } else { //updates timer
-            count--;
-            timerEl.textContent = "Time: " + Math.max(count,0);
-        }
-    },1000);
-}
-
+//populates questions and answers
 function askQuestion(number) {
     questionEl.textContent = questions[number];
     answer1El.textContent = answers1[number];
@@ -68,16 +47,57 @@ function askQuestion(number) {
     answer4El.textContent = answers4[number];
 }
 
-highscoresEl.addEventListener("click", showHighscores)
-function showHighscores() {
-    hideById("#start-screen");
+//hide all children within section with given id
+function hideById(idTag) {
+    var section = document.querySelector(idTag);
+    for (var i=0;i<section.children.length;i++) {
+        section.children[i].setAttribute("style", "display: none;")
+    }
+}
+
+//show all children within section with given id
+function displayById(idTag) {
+    hideById(activeId)
+    activeId=idTag;
+    var section = document.querySelector(idTag);
+    for (var i=0;i<section.children.length;i++) {
+        section.children[i].setAttribute("style", "display: block;")
+    }
+}
+
+//starts timer and goes to first question in quiz
+buttonEl.addEventListener("click", startQuiz);
+function startQuiz(){
+    displayById("#question-screen");
+    count = timeLimit;
+    score = 0;
+    questionIndex=0;
+    timerEl.textContent = "Time: " + timeLimit;
+    askQuestion(questionIndex);
+    var timerInterval = setInterval(function() {
+        if (count <= 0) { //Stops quiz when time is up, opens results screen
+            clearInterval(timerInterval);
+            timerEl.textContent = "";
+            resultEl.textContent = "";
+            scoreEl.textContent = "Your final score is "+ score;
+            displayById("#results-screen");
+        } else { //updates timer
+            count--;
+            timerEl.textContent = "Time: " + Math.max(count,0);
+        }
+    },1000);
+}
+
+//Opens score-screen when view high scores is clicked (top left of page)
+highscoresEl.addEventListener("click", showHighscore)
+function showHighscore(){
+    recallId = activeId
     displayById("#score-screen");
 }
 
 goBackHS.addEventListener("click", hideHighscores)
 function hideHighscores(){
-    hideById("#score-screen");
-    displayById("#start-screen");
+    displayById(recallId); //return to screen before high scores
 }
 
 resetHS.addEventListener("click", clearHighscores)
@@ -92,16 +112,17 @@ function isCorrect(event) {
     if (thingClicked.matches("button")) {
         var guess = thingClicked.getAttribute("id");
         if (guess === correctAnswers[questionIndex]) {
-            score++;
+            score+=questionWeight;
             resultEl.textContent = "Correct";
         } else {
             resultEl.textContent = "Incorrect"
-            count-=10;
+            count-=incorrectPenalty;
             timerEl.textContent = "Time: " + Math.max(count,0)
         }
         questionIndex++;
         if (questionIndex === questions.length){
             alert("finished");
+            score+=count; // adding remaining time to final score
             count = 0;
         } else {
         askQuestion(questionIndex);
@@ -114,22 +135,5 @@ function addScore() {
     highscoreList.push(nameInput.value + ": " + score);
     scoreListEl.textContent = highscoreList;
     displayById("#score-screen");
-    hideById("#results-screen");
+    recallId="#start-screen"; //pressing 'go back' in high-scores will take you to start-screen
 }
-
-//goal: hide section with given id tag and all children
-function hideById(idTag) {
-    var section = document.querySelector(idTag);
-    for (var i=0;i<section.children.length;i++) {
-        section.children[i].setAttribute("style", "display: none;")
-    }
-}
-
-//goal: show section with given id tag and all children
-function displayById(idTag) {
-    var section = document.querySelector(idTag);
-    for (var i=0;i<section.children.length;i++) {
-        section.children[i].setAttribute("style", "display: block;")
-    }
-}
-
