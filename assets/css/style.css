@@ -5,17 +5,17 @@ header {
 }
 
 li {
-    list-style: none;
+    list-style:decimal;
 }
 
-#score-screen > * {
+#score-screen {
     display: none;
 }
 
-#question-screen > *{
+#question-screen {
     display: none;
 }
 
-#results-screen > * {
+#results-screen {
     display: none;
 }

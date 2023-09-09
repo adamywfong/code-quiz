@@ -1,17 +1,21 @@
 //TODO: add highscore sorting
 var timeLimit = 40; //timer starting time
 var count = timeLimit;
-var highscoreList = [];
-var questionIndex = 0;
-var score = 0;
-var questionWeight = 10; //amount of points awarded on correct answer
-var incorrectPenalty = 10; //time deducted on incorrect answer
-var questions = ["The answer is #4", "The answer is #2","The answer is #4", "The answer is #3", "The answer is #1"];
+var questions = ["The answer is #4",
+     "The answer is #2",
+     "The answer is #4", 
+     "The answer is #3", 
+     "The answer is #1"];
 var answers1 = ["no", "no", "no", "no", "yesssss"];
 var answers2 = ["no", "yess", "no", "no", "no"];
 var answers3 = ["no", "no", "no", "yessss", "no"];
 var answers4 = ["yes", "no", "yesss", "no", "no"];
 var correctAnswers = ["answer4", "answer2", "answer4", "answer3", "answer1"];
+var highscoreList = [];
+var questionIndex = 0;
+var score = 0;
+var questionWeight = 10; //amount of points awarded on correct answer
+var incorrectPenalty = Math.floor(timeLimit/questions.length); //time deducted on incorrect answer
 var activeId = "#start-screen";
 var recallId; 
 
@@ -50,9 +54,10 @@ function askQuestion(number) {
 //hide all children within section with given id
 function hideById(idTag) {
     var section = document.querySelector(idTag);
-    for (var i=0;i<section.children.length;i++) {
-        section.children[i].setAttribute("style", "display: none;")
-    }
+    section.setAttribute("style", "display: none;");
+    // for (var i=0;i<section.children.length;i++) {
+    //     section.children[i].setAttribute("style", "display: none;");
+    // }
 }
 
 //show all children within section with given id
@@ -60,9 +65,10 @@ function displayById(idTag) {
     hideById(activeId)
     activeId=idTag;
     var section = document.querySelector(idTag);
-    for (var i=0;i<section.children.length;i++) {
-        section.children[i].setAttribute("style", "display: block;")
-    }
+    section.setAttribute("style", "display: block;");
+    // for (var i=0;i<section.children.length;i++) {
+    //     section.children[i].setAttribute("style", "display: block;");
+    // }
 }
 
 //starts timer and goes to first question in quiz
@@ -102,7 +108,13 @@ goBackHS.addEventListener("click", function() {displayById(recallId);}) //return
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
     highscoreList = [];
-    scoreListEl.textContent = highscoreList;
+    emptyScoreList();  
+}
+
+function emptyScoreList() {
+    while (scoreListEl.firstChild) {
+        scoreListEl.removeChild(scoreListEl.firstChild);
+    }
 }
 
 answerBox.addEventListener("click", isCorrect)
@@ -131,8 +143,19 @@ function isCorrect(event) {
 
 submitEl.addEventListener("click", addScore)
 function addScore() {
-    highscoreList.push(nameInput.value + ": " + score);
-    scoreListEl.textContent = highscoreList;
+    // checks if name input is empty before adding to highscore list
+    if (nameInput.value !== "") {
+        highscoreList.push({name: nameInput.value, userScore:score});
+    } else {
+        highscoreList.push({name: "noname", userScore:score});
+    }
+    highscoreList.sort(function(a,b) {return b.userScore - a.userScore}); // sorts highscore list from high to low
+    emptyScoreList();
+    for (i=0;i<highscoreList.length;i++) {
+        var hsListEntry = document.createElement("li");
+        hsListEntry.textContent = highscoreList[i].name + ": " + highscoreList[i].userScore;
+        scoreListEl.appendChild(hsListEntry);
+    }
     displayById("#score-screen");
     recallId="#start-screen"; //pressing 'go back' in high-scores will take you to start-screen
 }
