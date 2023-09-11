@@ -68,10 +68,7 @@ input {
     text-align: left;
 }
 
-#question-screen button {
-    width:200px;
-}
-
+/* TODO: make question result disappear after set time - once done make it appear on the results screen*/
 #question-result {
     border-top: 2px solid gray;
     text-align: left;
