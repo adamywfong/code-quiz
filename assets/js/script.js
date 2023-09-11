@@ -123,6 +123,7 @@ goBackHS.addEventListener("click", function() {
     highscoresEl.setAttribute("style", "display: default;");
 })
 
+//Clears high score list if button is pressed
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
     highscoreList = [];
@@ -139,6 +140,7 @@ function emptyScoreList() {
 answerBox.addEventListener("click", isCorrect)
 function isCorrect(event) {
     var thingClicked = event.target;
+    //check which answer has been clicked
     if (thingClicked.matches("button")) {
         var guess = thingClicked.getAttribute("id");
         if (guess === correctAnswers[questionIndex]) {
@@ -150,11 +152,12 @@ function isCorrect(event) {
             count-=incorrectPenalty;
             timerEl.textContent = "Time: " + Math.max(count,0)
         }
+        //displays result for 500ms
         resultEl.setAttribute("style", "display: block;");
-        clearTimeout(myTimeout);
-        var myTimeout = setTimeout(function() {
+        setTimeout(function() {
             resultEl.setAttribute("style", "display: none;");
         },500);
+        //proceeds to next question, or ends quiz if on final question
         questionIndex++;
         if (questionIndex === questions.length){
             score+=count; // adding remaining time to final score
@@ -162,10 +165,10 @@ function isCorrect(event) {
         } else {
         askQuestion(questionIndex);
         }
-        
     }
 }
 
+//submits name and score to highscore list and displays list
 submitEl.addEventListener("click", addScore)
 function addScore() {
     // checks if name input is empty before adding to highscore list
