@@ -1,36 +1,36 @@
 //TODO: add highscore sorting
-var timeLimit = 40; //timer starting time
+var timeLimit = 50; //timer starting time
 var count = timeLimit;
 var questions = [
     "Which of the following keywords is used to define a variable in Javascript?",
     "How do you stop an interval timer in Javascript?",
     "How do you write a comment in css?",
     "What is 3+5?",
-    "Is the answer to this question #1?"];
+    "Which of the following is a possible value for a boolean?"];
 var answers1 = [
     "var",
     "clearInterval",
     "//",
     "7",
-    "yes"];
+    "true"];
 var answers2 = [
     "let",
     "clearTimer",
     "```",
     "8",
-    "no"];
+    "correct"];
 var answers3 = [
     "both a and b",
     "intervalOver",
     "#",
     "9",
-    "no"];
+    "wrong"];
 var answers4 = [
     "None of the above",
     "None of the above",
     "/* */",
     "35",
-    "no"];
+    "yes"];
 var correctAnswers = [
     "answer3",
     "answer1", 
@@ -40,6 +40,7 @@ var correctAnswers = [
 var highscoreList = [];
 var questionIndex = 0;
 var score = 0;
+var numCorrect = 0;
 var questionWeight = 10; //amount of points awarded on correct answer
 var incorrectPenalty = Math.floor(timeLimit/questions.length); //time deducted on incorrect answer
 var activeId = "#start-screen";
@@ -98,6 +99,7 @@ function startQuiz(){
     count = timeLimit;
     score = 0;
     questionIndex=0;
+    numCorrect = 0;
     timerEl.textContent = "Time: " + timeLimit;
     askQuestion(questionIndex);
     var timerInterval = setInterval(function() {
@@ -105,7 +107,7 @@ function startQuiz(){
             clearInterval(timerInterval);
             timerEl.textContent = "";
             resultEl.textContent = "";
-            scoreEl.textContent = "Your final score is "+ score;
+            scoreEl.textContent = "You answered " + numCorrect + "/" + questions.length + " correctly.\nYour final score is "+ score;
             displayById("#results-screen");
         } else { //updates timer
             count--;
@@ -114,7 +116,7 @@ function startQuiz(){
     },1000);
 }
 
-//Opens score-screen when view high scores is clicked (top left of page)
+//Opens score-screen when view high scores is clicked (top left of page) and saves id of previous screen.
 highscoresEl.addEventListener("click", function() {showHighscore();})
 function showHighscore(){
     highscoresEl.setAttribute("style", "display: none;");
@@ -122,10 +124,11 @@ function showHighscore(){
     displayById("#score-screen");
 }
 
+//returns from score-screen to the previous screen
 goBackHS.addEventListener("click", function() {
     displayById(recallId);
     highscoresEl.setAttribute("style", "display: default;");
-}) //return to screen before high scores
+})
 
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
@@ -139,6 +142,7 @@ function emptyScoreList() {
     }
 }
 
+//checks if correct answer is correct or incorrect on click and proceeds to next question
 answerBox.addEventListener("click", isCorrect)
 function isCorrect(event) {
     var thingClicked = event.target;
@@ -146,6 +150,7 @@ function isCorrect(event) {
         var guess = thingClicked.getAttribute("id");
         if (guess === correctAnswers[questionIndex]) {
             score+=questionWeight;
+            numCorrect++;
             resultEl.textContent = "Correct";
         } else {
             resultEl.textContent = "Incorrect"
@@ -179,5 +184,5 @@ function addScore() {
         scoreListEl.appendChild(hsListEntry);
     }
     showHighscore();
-    recallId="#start-screen"; //pressing 'go back' in high-scores will take you to start-screen
+    recallId="#start-screen"; //manually sets the 'go back' button on score screen to return to start screen
 }
