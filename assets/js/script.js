@@ -1,5 +1,4 @@
-//TODO: add highscore sorting
-var timeLimit = 50; //timer starting time
+var timeLimit = 60; //timer starting time
 var count = timeLimit;
 var questions = [
     "Which of the following keywords is used to define a variable in Javascript?",
@@ -39,11 +38,11 @@ var correctAnswers = [
     "answer1"];
 var highscoreList = [];
 var questionIndex = 0;
-var score = 0;
-var numCorrect = 0;
+var score = 0; //tracks score, calculated as questionWeight*numCorrect + count
+var numCorrect = 0; //tracks number of questions correctly answered
 var questionWeight = 10; //amount of points awarded on correct answer
 var incorrectPenalty = Math.floor(timeLimit/questions.length); //time deducted on incorrect answer
-var activeId = "#start-screen";
+var activeId = "#start-screen"; //starts by displaying start screen
 var recallId; 
 
 //elements in header
@@ -53,14 +52,14 @@ var timerEl = document.querySelector("#timer");  //quiz timer(top right of scree
 //elements in start screen
 var buttonEl = document.querySelector("#trigger"); //start quiz button
 //elements in high score screen
-var scoreListEl = document.querySelector("#score-list");
+var scoreListEl = document.querySelector("#score-list"); //highscores will appear here once submitted
 var goBackHS = document.querySelector("#back-highscores"); //back button for high score screen
 var resetHS = document.querySelector("#clear-highscores"); //reset button for list of high scores
 //elements in quiz screen
 var questionEl = document.querySelector("#question"); //question section of quiz
 var answerBox = document.querySelector("#answers"); //unordered list of answers
-  var answer1El = document.querySelector("#answer1"); 
-  var answer2El = document.querySelector("#answer2"); 
+  var answer1El = document.querySelector("#answer1");
+  var answer2El = document.querySelector("#answer2");
   var answer3El = document.querySelector("#answer3");
   var answer4El = document.querySelector("#answer4");
 var resultEl = document.querySelector("#question-result"); //states whether answer is correct or incorrect
@@ -78,15 +77,10 @@ function askQuestion(number) {
     answer4El.textContent = answers4[number];
 }
 
-//hide all children within section with given id
-function hideById(idTag) {
-    var section = document.querySelector(idTag);
-    section.setAttribute("style", "display: none;");
-}
-
-//show all children within section with given id
+//show all children within section with given id and hide previous section
 function displayById(idTag) {
-    hideById(activeId)
+    var toHide = document.querySelector(activeId);
+    toHide.setAttribute("style", "display: none;");
     activeId=idTag;
     var section = document.querySelector(idTag);
     section.setAttribute("style", "display: block;");
@@ -106,7 +100,6 @@ function startQuiz(){
         if (count <= 0) { //Stops quiz when time is up, opens results screen
             clearInterval(timerInterval);
             timerEl.textContent = "";
-            resultEl.textContent = "";
             scoreEl.textContent = "You answered " + numCorrect + "/" + questions.length + " correctly.\nYour final score is "+ score;
             displayById("#results-screen");
         } else { //updates timer
@@ -157,14 +150,19 @@ function isCorrect(event) {
             count-=incorrectPenalty;
             timerEl.textContent = "Time: " + Math.max(count,0)
         }
+        resultEl.setAttribute("style", "display: block;");
+        clearTimeout(myTimeout);
+        var myTimeout = setTimeout(function() {
+            resultEl.setAttribute("style", "display: none;");
+        },500);
         questionIndex++;
         if (questionIndex === questions.length){
-            alert("finished");
             score+=count; // adding remaining time to final score
             count = 0;
         } else {
         askQuestion(questionIndex);
         }
+        
     }
 }
 

@@ -68,8 +68,8 @@ input {
     text-align: left;
 }
 
-/* TODO: make question result disappear after set time - once done make it appear on the results screen*/
 #question-result {
+    display:none;
     border-top: 2px solid gray;
     text-align: left;
     color: darkmagenta;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code Quiz</title>
     <link rel="stylesheet" href="assets/css/reset.css" />
@@ -30,29 +30,28 @@
         <h2 id="question"></h2>
         <ul id="answers">
           <li>
-            <button id="answer1"></button>
+            <button id="answer1">1</button>
           </li>
           <li>
-            <button id="answer2"></button>
+            <button id="answer2">2</button>
           </li>
           <li>
-            <button id="answer3"></button>
+            <button id="answer3">3</button>
           </li>
           <li>
-            <button id="answer4"></button>
+            <button id="answer4">4</button>
           </li>
         </ul>
-        <h3 id="question-result"></h3>
       </section>
       <section id="results-screen">
         <h1>All Done</h1>
         <p id="final-score"></p>
-        <input placeholder="Enter your initials" id="name" /><button id="submit">Submit</button>
+        <input placeholder="Enter your initials" id="name" autocomplete="off"/><button id="submit">Submit</button>
       </section>
       <!-- plan to move question-result to footer so last question result will appear under results page -->
-      <!-- <footer>
+      <footer>
         <h3 id="question-result"></h3>
-      </footer> -->
+      </footer>
     <script src="assets/js/script.js"></script>
     </main>
   </body>
