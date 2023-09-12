@@ -127,6 +127,7 @@ goBackHS.addEventListener("click", function() {
 resetHS.addEventListener("click", clearHighscores)
 function clearHighscores() {
     highscoreList = [];
+    localStorage.setItem("highscoreList", JSON.stringify(highscoreList));
     emptyScoreList();  
 }
 
@@ -178,6 +179,7 @@ function addScore() {
         highscoreList.push({name: "noname", userScore:score});
     }
     highscoreList.sort(function(a,b) {return b.userScore - a.userScore}); // sorts highscore list from high to low
+    localStorage.setItem("highscoreList", JSON.stringify(highscoreList));
     emptyScoreList();
     for (i=0;i<highscoreList.length;i++) {
         var hsListEntry = document.createElement("li");
@@ -187,3 +189,16 @@ function addScore() {
     showHighscore();
     recallId="#start-screen"; //manually sets the 'go back' button on score screen to return to start screen
 }
+
+function init() {
+    highscoreList = JSON.parse(localStorage.getItem("highscoreList"))
+    if (highscoreList !== null) {
+        for (i=0;i<highscoreList.length;i++) {
+            var hsListEntry = document.createElement("li");
+            hsListEntry.textContent = highscoreList[i].name + ": " + highscoreList[i].userScore;
+            scoreListEl.appendChild(hsListEntry);
+        }
+    }
+}
+
+init();
