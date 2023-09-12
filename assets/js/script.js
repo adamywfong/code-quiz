@@ -1,4 +1,4 @@
-var timeLimit = 100; //timer starting time
+var timeLimit = 60; //timer starting time
 var count = timeLimit;
 var questions = [
     "Which of the following keywords is used to define a variable in Javascript?",
