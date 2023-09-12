@@ -1,4 +1,4 @@
-var timeLimit = 60; //timer starting time
+var timeLimit = 100; //timer starting time
 var count = timeLimit;
 var questions = [
     "Which of the following keywords is used to define a variable in Javascript?",
@@ -38,10 +38,10 @@ var correctAnswers = [
     "answer1"];
 var highscoreList = [];
 var questionIndex = 0;
-var score = 0; //tracks score, calculated as questionWeight*numCorrect + count
+var score = 0; //tracks score, =remaining time if any questions answered correctly
 var numCorrect = 0; //tracks number of questions correctly answered
-var questionWeight = 10; //amount of points awarded on correct answer
 var incorrectPenalty = Math.floor(timeLimit/questions.length); //time deducted on incorrect answer
+var isDone = false;
 var activeId = "#start-screen"; //starts by displaying start screen
 var recallId; 
 
@@ -95,9 +95,10 @@ function startQuiz(){
     questionIndex=0;
     numCorrect = 0;
     timerEl.textContent = "Time: " + timeLimit;
+    isDone = false;
     askQuestion(questionIndex);
     var timerInterval = setInterval(function() {
-        if (count <= 0) { //Stops quiz when time is up, opens results screen
+        if (isDone || count <= 0) { //Stops quiz when all questions answered or when time is up, opens results screen (count can be under 0 due to incorrect answer penalty)
             clearInterval(timerInterval);
             timerEl.textContent = "";
             scoreEl.textContent = "You answered " + numCorrect + "/" + questions.length + " correctly.\nYour final score is "+ score;
@@ -145,7 +146,6 @@ function isCorrect(event) {
     if (thingClicked.matches("button")) {
         var guess = thingClicked.getAttribute("id");
         if (guess === correctAnswers[questionIndex]) {
-            score+=questionWeight;
             numCorrect++;
             resultEl.textContent = "Correct";
         } else {
@@ -161,8 +161,12 @@ function isCorrect(event) {
         //proceeds to next question, or ends quiz if on final question
         questionIndex++;
         if (questionIndex === questions.length){
+            if (numCorrect > 0) {
             score+=count; // adding remaining time to final score
-            count = 0;
+            } else {
+                score = Math.min(count,0); //score is negative or zero if no questions answered correctly
+            }
+            isDone = true;
         } else {
         askQuestion(questionIndex);
         }
