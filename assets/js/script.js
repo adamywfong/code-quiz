@@ -147,9 +147,9 @@ function isCorrect(event) {
         var guess = thingClicked.getAttribute("id");
         if (guess === correctAnswers[questionIndex]) {
             numCorrect++;
-            resultEl.textContent = "Correct";
+            resultEl.children[1].textContent = "Correct";
         } else {
-            resultEl.textContent = "Incorrect"
+            resultEl.children[1].textContent = "Incorrect"
             count-=incorrectPenalty;
             timerEl.textContent = "Time: " + Math.max(count,0)
         }
