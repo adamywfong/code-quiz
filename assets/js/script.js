@@ -98,7 +98,7 @@ function startQuiz(){
     isDone = false;
     askQuestion(questionIndex);
     var timerInterval = setInterval(function() {
-        if (isDone || count <= 0) { //Stops quiz when all questions answered or when time is up, opens results screen (count can be under 0 due to incorrect answer penalty)
+        if (isDone) { //Stops quiz when all questions answered or when time is up, opens results screen (count can be under 0 due to incorrect answer penalty)
             clearInterval(timerInterval);
             timerEl.textContent = "";
             scoreEl.textContent = "You answered " + numCorrect + "/" + questions.length + " correctly.\nYour final score is "+ score;
@@ -106,6 +106,9 @@ function startQuiz(){
         } else { //updates timer
             count--;
             timerEl.textContent = "Time: " + Math.max(count,0);
+            if (count<=0) {
+                isDone = true;
+            }
         }
     },1000);
 }
