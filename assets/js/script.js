@@ -205,7 +205,7 @@ function init() {
             hsListEntry.textContent = highscoreList[i].name + ": " + highscoreList[i].userScore;
             scoreListEl.appendChild(hsListEntry);
         }
-    }
+    } else highscoreList = [];
 }
 
 init();
